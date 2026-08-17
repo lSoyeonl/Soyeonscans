@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Редактор проектов — Soyeon Scans</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="admin-page">
+<header class="topbar">
+  <a class="brand" href="index.html"><span class="brand-mark">✿</span><span>Soyeon Scans</span></a>
+  <nav class="nav"><a href="index.html">Главная</a><a href="admin.html" class="active">Редактор</a></nav>
+  <div></div>
+</header>
+<main class="admin-wrap container">
+  <section class="admin-intro">
+    <div><span class="eyebrow">Soyeon Scans</span><h1>Редактор проектов</h1></div>
+    <p>Здесь можно менять описание, автора, статус, главы и дополнительные читалки. Редактор сохраняет черновик в браузере и выгружает готовый <code>manga.json</code> для загрузки в GitHub.</p>
+  </section>
+
+  <div class="admin-layout">
+    <aside class="admin-projects">
+      <div class="admin-side-head"><h2>Проекты</h2><button id="addProject" class="admin-btn small">+ Проект</button></div>
+      <div id="projectList" class="admin-project-list"></div>
+    </aside>
+
+    <section class="admin-editor" id="editor"></section>
+  </div>
+
+  <section class="admin-actions">
+    <button id="saveDraft" class="admin-btn">Сохранить черновик</button>
+    <button id="previewProject" class="admin-btn secondary">Предпросмотр</button>
+    <button id="exportJson" class="admin-btn accent">Скачать manga.json</button>
+    <button id="resetData" class="admin-btn danger">Сбросить черновик</button>
+    <span id="saveState" class="save-state"></span>
+  </section>
+
+  <section class="admin-note">
+    <strong>Как опубликовать для всех:</strong>
+    <span>нажмите «Скачать manga.json», затем замените файл <code>data/manga.json</code> в репозитории Soyeonscans. GitHub Pages обновит сайт автоматически.</span>
+  </section>
+</main>
+<script src="admin.js"></script>
+</body>
+</html>
