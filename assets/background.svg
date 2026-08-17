@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<defs>
+  <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+    <stop offset="0" stop-color="#141015"/>
+    <stop offset=".45" stop-color="#2b1c26"/>
+    <stop offset="1" stop-color="#0b0c11"/>
+  </linearGradient>
+  <radialGradient id="moon">
+    <stop offset="0" stop-color="#f6dec9" stop-opacity=".72"/>
+    <stop offset=".45" stop-color="#e3b6a7" stop-opacity=".22"/>
+    <stop offset="1" stop-color="#e3b6a7" stop-opacity="0"/>
+  </radialGradient>
+  <filter id="blur"><feGaussianBlur stdDeviation="2"/></filter>
+</defs>
+<rect width="1920" height="1080" fill="url(#g)"/>
+<circle cx="1280" cy="270" r="260" fill="url(#moon)"/>
+<path d="M0 720 C250 650 390 730 600 690 C900 625 1090 710 1320 650 C1540 590 1710 670 1920 620 L1920 1080 L0 1080Z" fill="#090b11" opacity=".92"/>
+<path d="M0 790 C250 730 460 790 680 745 C900 700 1190 770 1460 710 C1640 670 1800 700 1920 680 L1920 1080 L0 1080Z" fill="#08090d" opacity=".98"/>
+<g fill="#d7a5ae" opacity=".35" filter="url(#blur)">
+  <circle cx="1370" cy="115" r="10"/><circle cx="1415" cy="145" r="7"/><circle cx="1460" cy="105" r="12"/>
+  <circle cx="1510" cy="155" r="9"/><circle cx="1570" cy="120" r="11"/><circle cx="1630" cy="170" r="8"/>
+  <circle cx="1690" cy="115" r="10"/><circle cx="1750" cy="150" r="12"/><circle cx="1820" cy="105" r="8"/>
+</g>
+<g stroke="#6b4b53" stroke-width="10" opacity=".5" fill="none">
+ <path d="M1380 0 C1500 150 1670 110 1920 270"/>
+ <path d="M1510 0 C1600 110 1760 90 1920 160"/>
+</g>
+</svg>
