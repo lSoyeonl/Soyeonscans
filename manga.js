@@ -17,7 +17,7 @@ async function loadData(){
       if(Array.isArray(draft) && draft.length) return draft;
     }catch{}
   }
-  const res=await fetch('data/manga.json',{cache:'no-store'});
+  const res=await fetch('data/manga.json?v=1.2.0',{cache:'no-store'});
   return await res.json();
 }
 

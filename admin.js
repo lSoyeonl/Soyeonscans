@@ -10,7 +10,7 @@ async function load(){
     const saved=JSON.parse(localStorage.getItem(STORE)||'null');
     if(Array.isArray(saved) && saved.length){data=saved;return;}
   }catch{}
-  const res=await fetch('data/manga.json',{cache:'no-store'});
+  const res=await fetch('data/manga.json?v=1.2.0',{cache:'no-store'});
   data=await res.json();
 }
 const slug=s=>String(s||'project').toLowerCase().trim().replace(/ё/g,'е').replace(/[^a-zа-я0-9]+/gi,'-').replace(/^-+|-+$/g,'');
@@ -102,6 +102,6 @@ $('#addProject').onclick=()=>{syncForm();data.push(blankProject());active=data.l
 $('#saveDraft').onclick=save;
 $('#exportJson').onclick=exportJson;
 $('#previewProject').onclick=()=>{save();window.open(`manga.html?id=${encodeURIComponent(data[active].id)}&preview=1`,'_blank');};
-$('#resetData').onclick=async()=>{if(!confirm('Удалить локальный черновик и снова загрузить данные сайта?'))return;localStorage.removeItem(STORE);const res=await fetch('data/manga.json',{cache:'no-store'});data=await res.json();active=0;render();};
+$('#resetData').onclick=async()=>{if(!confirm('Удалить локальный черновик и снова загрузить данные сайта?'))return;localStorage.removeItem(STORE);const res=await fetch('data/manga.json?v=1.2.0',{cache:'no-store'});data=await res.json();active=0;render();};
 
 load().then(render);
