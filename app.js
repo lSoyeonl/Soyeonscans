@@ -2,8 +2,7 @@ const $ = (q, p=document) => p.querySelector(q);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 
 async function loadManga(){
-  const res = await fetch('data/manga.json?v=1.2.0',{cache:'no-store'});
-  return await res.json();
+  return await window.SoyeonContent.loadCatalog();
 }
 
 function homeCard(m){

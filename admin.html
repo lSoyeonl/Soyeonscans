@@ -4,18 +4,19 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Редактор проектов — Soyeon Scans</title>
-<link rel="stylesheet" href="styles.css?v=1.2.0">
+<link rel="stylesheet" href="styles.css?v=1.3.0">
 </head>
-<body class="admin-page">
+<body class="admin-page auth-guard">
 <header class="topbar">
   <a class="brand" href="index.html"><span class="brand-mark">✿</span><span>Soyeon Scans</span></a>
   <nav class="nav"><a href="index.html">Главная</a><a href="admin.html" class="active">Редактор</a></nav>
-  <div></div>
+  <button id="adminLogout" class="admin-btn small" type="button">Выйти</button>
 </header>
-<main class="admin-wrap container">
+<div id="authChecking" class="auth-checking">Проверяем права администратора…</div>
+<main id="adminMain" class="admin-wrap container" hidden>
   <section class="admin-intro">
     <div><span class="eyebrow">Soyeon Scans</span><h1>Редактор проектов</h1></div>
-    <p>Здесь можно менять описание, автора, статус, главы и дополнительные читалки. Редактор сохраняет черновик в браузере и выгружает готовый <code>manga.json</code> для загрузки в GitHub.</p>
+    <p>Изменения сохраняются непосредственно в Supabase и сразу становятся доступны посетителям сайта. Редактирование разрешено только вашему аккаунту.</p>
   </section>
 
   <div class="admin-layout">
@@ -23,24 +24,26 @@
       <div class="admin-side-head"><h2>Проекты</h2><button id="addProject" class="admin-btn small">+ Проект</button></div>
       <div id="projectList" class="admin-project-list"></div>
     </aside>
-
     <section class="admin-editor" id="editor"></section>
   </div>
 
   <section class="admin-actions">
-    <button id="saveDraft" class="admin-btn">Сохранить черновик</button>
+    <button id="saveToSupabase" class="admin-btn accent">Сохранить на сайте</button>
     <button id="previewProject" class="admin-btn secondary">Предпросмотр</button>
-    <button id="exportJson" class="admin-btn accent">Скачать manga.json</button>
-    <button id="resetData" class="admin-btn danger">Сбросить черновик</button>
+    <button id="reloadFromSupabase" class="admin-btn">Отменить изменения</button>
     <span id="saveState" class="save-state"></span>
   </section>
 
   <section class="admin-note">
-    <strong>Как опубликовать для всех:</strong>
-    <span>нажмите «Скачать manga.json», затем замените файл <code>data/manga.json</code> в репозитории Soyeonscans. GitHub Pages обновит сайт автоматически.</span>
+    <strong>Защищённый редактор:</strong>
+    <span>данные публикуются в таблицу <code>soyeon_content</code>; права записи дополнительно проверяются политиками RLS в Supabase.</span>
   </section>
 </main>
-<footer>© 2026 Soyeon Scans <span class="site-version">v1.2.0</span></footer>
-<script src="admin.js?v=1.2.0"></script>
+<footer>© 2026 Soyeon Scans <span class="site-version">v1.3.0</span></footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js?v=1.3.0"></script>
+<script src="supabase-client.js?v=1.3.0"></script>
+<script src="content-service.js?v=1.3.0"></script>
+<script src="admin.js?v=1.3.0"></script>
 </body>
 </html>

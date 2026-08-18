@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Вход администратора — Soyeon Scans</title>
+<link rel="stylesheet" href="styles.css?v=1.3.0">
+</head>
+<body class="admin-login-page">
+<header class="topbar">
+  <a class="brand" href="index.html"><span class="brand-mark">✿</span><span>Soyeon Scans</span></a>
+  <nav class="nav"><a href="index.html">Главная</a></nav>
+  <div></div>
+</header>
+<main class="login-shell container">
+  <section class="login-card">
+    <span class="eyebrow">Закрытый раздел</span>
+    <h1>Вход администратора</h1>
+    <p>Редактор доступен только владельцу Soyeon Scans.</p>
+    <form id="adminLoginForm" class="login-form" autocomplete="on">
+      <label><span>E-mail</span><input id="adminEmail" type="email" autocomplete="username" required></label>
+      <label><span>Пароль</span><input id="adminPassword" type="password" autocomplete="current-password" required></label>
+      <button id="loginButton" class="admin-btn accent" type="submit">Войти</button>
+      <div id="loginState" class="login-state" role="status" aria-live="polite"></div>
+    </form>
+  </section>
+</main>
+<footer>© 2026 Soyeon Scans <span class="site-version">v1.3.0</span></footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js?v=1.3.0"></script>
+<script src="supabase-client.js?v=1.3.0"></script>
+<script src="content-service.js?v=1.3.0"></script>
+<script src="admin-auth.js?v=1.3.0"></script>
+</body>
+</html>

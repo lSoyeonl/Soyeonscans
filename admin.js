@@ -1,17 +1,12 @@
 const $=(q,p=document)=>p.querySelector(q);
 const $$=(q,p=document)=>[...p.querySelectorAll(q)];
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
-const STORE='soyeonScansMangaDraftV1';
 let data=[];
 let active=0;
 
 async function load(){
-  try{
-    const saved=JSON.parse(localStorage.getItem(STORE)||'null');
-    if(Array.isArray(saved) && saved.length){data=saved;return;}
-  }catch{}
-  const res=await fetch('data/manga.json?v=1.2.0',{cache:'no-store'});
-  data=await res.json();
+  data=await window.SoyeonContent.loadCatalog();
+  if(!Array.isArray(data)) data=[];
 }
 const slug=s=>String(s||'project').toLowerCase().trim().replace(/ё/g,'е').replace(/[^a-zа-я0-9]+/gi,'-').replace(/^-+|-+$/g,'');
 function blankProject(){return {id:`project-${Date.now()}`,title:'Новый проект',originalTitle:'',author:'',genre:['Маньхуа'],status:'Продолжается',description:'',cover:'',updated:'',latestChapter:'',chapters:[]}}
@@ -87,21 +82,53 @@ function syncForm(){
       ch.links.push(link);
     });
   });
+  if(!m.id || m.id.startsWith('project-')) m.id=slug(m.title)||m.id;
 }
 function bindEditor(){
-  $('#deleteProject').onclick=()=>{if(confirm('Удалить этот проект из черновика?')){data.splice(active,1);active=Math.max(0,active-1);render();}};
+  $('#deleteProject').onclick=()=>{if(confirm('Удалить этот проект? Изменение вступит в силу после сохранения.')){data.splice(active,1);active=Math.max(0,active-1);render();}};
   $('#addChapter').onclick=()=>{syncForm();const m=data[active];m.chapters.push({number:String(m.chapters.length+1),title:'',date:'',links:[]});render();};
   $$('.delete-chapter').forEach(btn=>btn.onclick=()=>{syncForm();const ci=Number(btn.closest('.admin-chapter').dataset.ci);data[active].chapters.splice(ci,1);render();});
   $$('.add-reader').forEach(btn=>btn.onclick=()=>{syncForm();const ci=Number(btn.closest('.admin-chapter').dataset.ci);data[active].chapters[ci].links.push({name:'',url:'',note:''});render();});
   $$('.delete-reader').forEach(btn=>btn.onclick=()=>{syncForm();const box=btn.closest('.admin-chapter');const ci=Number(box.dataset.ci);const li=Number(btn.closest('.reader-edit-row').dataset.li);data[active].chapters[ci].links.splice(li,1);render();});
 }
-function save(){syncForm();localStorage.setItem(STORE,JSON.stringify(data));$('#saveState').textContent='Черновик сохранён';setTimeout(()=>$('#saveState').textContent='',1800);drawList();}
-function exportJson(){save();const blob=new Blob([JSON.stringify(data,null,2)+'\n'],{type:'application/json;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='manga.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500);}
+function state(message, type='ok'){
+  const el=$('#saveState');
+  el.textContent=message;
+  el.className=`save-state ${type}`;
+}
+async function saveToSupabase(){
+  syncForm();
+  state('Сохраняем…');
+  const btn=$('#saveToSupabase');
+  btn.disabled=true;
+  try{
+    await window.SoyeonContent.saveCatalog(data);
+    state('Сохранено. Изменения опубликованы.');
+    drawList();
+  }catch(err){
+    console.error(err);
+    state(err?.message||'Ошибка сохранения.','error');
+  }finally{btn.disabled=false;}
+}
+async function reloadFromSupabase(){
+  if(!confirm('Отменить несохранённые изменения и заново загрузить данные сайта?')) return;
+  state('Загружаем…');
+  try{await load();active=0;render();state('Данные загружены заново.');}
+  catch(err){state(err?.message||'Ошибка загрузки.','error');}
+}
 
-$('#addProject').onclick=()=>{syncForm();data.push(blankProject());active=data.length-1;render();};
-$('#saveDraft').onclick=save;
-$('#exportJson').onclick=exportJson;
-$('#previewProject').onclick=()=>{save();window.open(`manga.html?id=${encodeURIComponent(data[active].id)}&preview=1`,'_blank');};
-$('#resetData').onclick=async()=>{if(!confirm('Удалить локальный черновик и снова загрузить данные сайта?'))return;localStorage.removeItem(STORE);const res=await fetch('data/manga.json?v=1.2.0',{cache:'no-store'});data=await res.json();active=0;render();};
-
-load().then(render);
+async function boot(){
+  const user=await window.SoyeonContent.requireAdmin({redirect:true});
+  if(!user) return;
+  $('#authChecking')?.remove();
+  $('#adminMain').hidden=false;
+  document.body.classList.add('auth-ready');
+  $('#adminLogout').onclick=async()=>{await window.soyeonSupabase.auth.signOut();location.replace('index.html');};
+  $('#addProject').onclick=()=>{syncForm();data.push(blankProject());active=data.length-1;render();};
+  $('#saveToSupabase').onclick=saveToSupabase;
+  $('#previewProject').onclick=()=>{syncForm();sessionStorage.setItem('soyeonScansPreviewV13',JSON.stringify(data));window.open(`manga.html?id=${encodeURIComponent(data[active].id)}&preview=1`,'_blank');};
+  $('#reloadFromSupabase').onclick=reloadFromSupabase;
+  try{await load();render();}
+  catch(err){state(err?.message||'Не удалось загрузить данные.','error');}
+}
+boot();

@@ -13,12 +13,11 @@ async function loadData(){
   const params=new URLSearchParams(location.search);
   if(params.get('preview')==='1'){
     try{
-      const draft=JSON.parse(localStorage.getItem('soyeonScansMangaDraftV1')||'null');
-      if(Array.isArray(draft) && draft.length) return draft;
+      const preview=JSON.parse(sessionStorage.getItem('soyeonScansPreviewV13')||'null');
+      if(Array.isArray(preview) && preview.length) return preview;
     }catch{}
   }
-  const res=await fetch('data/manga.json?v=1.2.0',{cache:'no-store'});
-  return await res.json();
+  return await window.SoyeonContent.loadCatalog();
 }
 
 function statusClass(status=''){

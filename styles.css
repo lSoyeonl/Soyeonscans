@@ -561,3 +561,26 @@ body::before{display:none !important}
   .cards{grid-template-columns:1fr}
   .card{max-width:320px;margin-inline:auto}
 }
+
+/* v1.3.0 — Supabase private admin */
+.auth-guard:not(.auth-ready) #adminLogout{visibility:hidden}
+.auth-checking{min-height:55vh;display:grid;place-items:center;color:#cdbbb4;font-size:20px}
+.login-shell{min-height:70vh;display:grid;place-items:center;padding:60px 0}
+.login-card{width:min(520px,100%);padding:34px;border:1px solid var(--line);border-radius:18px;background:rgba(18,16,20,.92);box-shadow:var(--shadow)}
+.login-card h1{font-size:clamp(36px,5vw,54px);line-height:1.05;margin:4px 0 12px}
+.login-card>p{color:#c8b8b2;margin:0 0 24px;line-height:1.5}
+.login-form{display:grid;gap:14px}
+.login-form label{display:grid;gap:7px}
+.login-form label>span{font:11px Arial,sans-serif;text-transform:uppercase;letter-spacing:.06em;color:#a99a95}
+.login-form input{width:100%;border:1px solid rgba(231,196,181,.26);border-radius:10px;padding:13px 14px;background:#0d0d12;color:var(--text);outline:none}
+.login-form input:focus{border-color:var(--accent)}
+.login-form .admin-btn{margin-top:4px;min-height:46px}
+.login-state{min-height:22px;color:#b8e3c7;font:13px Arial,sans-serif;line-height:1.4}
+.login-state.error,.save-state.error{color:#efb7b7}
+.admin-btn:disabled{opacity:.55;cursor:wait}
+#adminLogout{justify-self:end}
+@media(max-width:760px){
+  #adminLogout{grid-column:3}
+  .login-shell{padding:36px 0}
+  .login-card{padding:24px}
+}
